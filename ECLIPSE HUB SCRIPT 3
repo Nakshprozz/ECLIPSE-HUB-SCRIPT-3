@@ -1,23 +1,23 @@
--- ECLIPSE HUB 🌙 Script by NKDev
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local localPlayer = Players.LocalPlayer
-local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
+-- ECLIPSE HUB 🌙
+-- Made By NKDev
 
--- Main GUI
+local Player = game:GetService("Players").LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
+-- Create main screen GUI
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "EclipseHub"
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 ScreenGui.Parent = game:GetService("CoreGui")
 
+-- Main frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 350, 0, 250)
 MainFrame.Position = UDim2.new(0.5, -175, 0.5, -125)
-MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-MainFrame.BackgroundTransparency = 0.1
+MainFrame.BorderSizePixel = 0
 MainFrame.ClipsDescendants = true
 
 -- Rounded corners
@@ -25,444 +25,26 @@ local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 12)
 UICorner.Parent = MainFrame
 
-ScreenGui.Parent = game:GetService("CoreGui")
-MainFrame.Parent = ScreenGui
+-- Make draggable
+local dragging
+local dragInput
+local dragStart
+local startPos
 
--- Title
-local Title = Instance.new("TextLabel")
-Title.Name = "Title"
-Title.Size = UDim2.new(0, 200, 0, 40)
-Title.Position = UDim2.new(0.5, -100, 0, 10)
-Title.BackgroundTransparency = 1
-Title.Text = "ECLIPSE HUB 🌙"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.Font = Enum.Font.GothamBold
-Title.TextSize = 20
-Title.Parent = MainFrame
-
--- Made by text
-local MadeBy = Instance.new("TextLabel")
-MadeBy.Name = "MadeBy"
-MadeBy.Size = UDim2.new(0, 200, 0, 20)
-MadeBy.Position = UDim2.new(0.5, -100, 0, 40)
-MadeBy.BackgroundTransparency = 1
-MadeBy.Text = "Made By NKDev"
-MadeBy.TextColor3 = Color3.fromRGB(255, 255, 255)
-MadeBy.TextTransparency = 0.5
-MadeBy.Font = Enum.Font.Gotham
-MadeBy.TextSize = 14
-MadeBy.Parent = MainFrame
-
--- Panel
-local Panel = Instance.new("Frame")
-Panel.Name = "Panel"
-Panel.Size = UDim2.new(0, 320, 0, 170)
-Panel.Position = UDim2.new(0.5, -160, 0, 70)
-Panel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-Panel.BackgroundTransparency = 0.2
-
-local PanelCorner = Instance.new("UICorner")
-PanelCorner.CornerRadius = UDim.new(0, 8)
-PanelCorner.Parent = Panel
-
-Panel.Parent = MainFrame
-
--- Speed Toggle
-local SpeedFrame = Instance.new("Frame")
-SpeedFrame.Name = "SpeedFrame"
-SpeedFrame.Size = UDim2.new(0, 300, 0, 40)
-SpeedFrame.Position = UDim2.new(0.5, -150, 0, 10)
-SpeedFrame.BackgroundTransparency = 1
-SpeedFrame.Parent = Panel
-
-local SpeedLabel = Instance.new("TextLabel")
-SpeedLabel.Name = "SpeedLabel"
-SpeedLabel.Size = UDim2.new(0, 150, 0, 40)
-SpeedLabel.Position = UDim2.new(0, 0, 0, 0)
-SpeedLabel.BackgroundTransparency = 1
-SpeedLabel.Text = "Increase Speed"
-SpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-SpeedLabel.Font = Enum.Font.Gotham
-SpeedLabel.TextSize = 16
-SpeedLabel.TextXAlignment = Enum.TextXAlignment.Left
-SpeedLabel.Parent = SpeedFrame
-
-local SpeedToggle = Instance.new("TextButton")
-SpeedToggle.Name = "SpeedToggle"
-SpeedToggle.Size = UDim2.new(0, 50, 0, 25)
-SpeedToggle.Position = UDim2.new(1, -60, 0.5, -12.5)
-SpeedToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-SpeedToggle.AutoButtonColor = false
-SpeedToggle.Text = ""
-SpeedToggle.Font = Enum.Font.SourceSans
-SpeedToggle.TextSize = 14
-
-local SpeedToggleCorner = Instance.new("UICorner")
-SpeedToggleCorner.CornerRadius = UDim.new(0, 12)
-SpeedToggleCorner.Parent = SpeedToggle
-
-local SpeedToggleCircle = Instance.new("Frame")
-SpeedToggleCircle.Name = "SpeedToggleCircle"
-SpeedToggleCircle.Size = UDim2.new(0, 21, 0, 21)
-SpeedToggleCircle.Position = UDim2.new(0, 2, 0.5, -10.5)
-SpeedToggleCircle.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
-SpeedToggleCircle.BorderSizePixel = 0
-
-local SpeedToggleCircleCorner = Instance.new("UICorner")
-SpeedToggleCircleCorner.CornerRadius = UDim.new(0, 10)
-SpeedToggleCircleCorner.Parent = SpeedToggleCircle
-
-SpeedToggleCircle.Parent = SpeedToggle
-SpeedToggle.Parent = SpeedFrame
-
-local SpeedDescription = Instance.new("TextLabel")
-SpeedDescription.Name = "SpeedDescription"
-SpeedDescription.Size = UDim2.new(0, 300, 0, 20)
-SpeedDescription.Position = UDim2.new(0, 0, 0, 40)
-SpeedDescription.BackgroundTransparency = 1
-SpeedDescription.Text = "Turning It On Sets The Players Speed To 50"
-SpeedDescription.TextColor3 = Color3.fromRGB(255, 255, 255)
-SpeedDescription.TextTransparency = 0.5
-SpeedDescription.Font = Enum.Font.Gotham
-SpeedDescription.TextSize = 12
-SpeedDescription.TextXAlignment = Enum.TextXAlignment.Left
-SpeedDescription.Parent = SpeedFrame
-
--- Fly Toggle
-local FlyFrame = Instance.new("Frame")
-FlyFrame.Name = "FlyFrame"
-FlyFrame.Size = UDim2.new(0, 300, 0, 40)
-FlyFrame.Position = UDim2.new(0.5, -150, 0, 80)
-FlyFrame.BackgroundTransparency = 1
-FlyFrame.Parent = Panel
-
-local FlyLabel = Instance.new("TextLabel")
-FlyLabel.Name = "FlyLabel"
-FlyLabel.Size = UDim2.new(0, 150, 0, 40)
-FlyLabel.Position = UDim2.new(0, 0, 0, 0)
-FlyLabel.BackgroundTransparency = 1
-FlyLabel.Text = "Fly"
-FlyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-FlyLabel.Font = Enum.Font.Gotham
-FlyLabel.TextSize = 16
-FlyLabel.TextXAlignment = Enum.TextXAlignment.Left
-FlyLabel.Parent = FlyFrame
-
-local FlyToggle = Instance.new("TextButton")
-FlyToggle.Name = "FlyToggle"
-FlyToggle.Size = UDim2.new(0, 50, 0, 25)
-FlyToggle.Position = UDim2.new(1, -60, 0.5, -12.5)
-FlyToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-FlyToggle.AutoButtonColor = false
-FlyToggle.Text = ""
-FlyToggle.Font = Enum.Font.SourceSans
-FlyToggle.TextSize = 14
-
-local FlyToggleCorner = Instance.new("UICorner")
-FlyToggleCorner.CornerRadius = UDim.new(0, 12)
-FlyToggleCorner.Parent = FlyToggle
-
-local FlyToggleCircle = Instance.new("Frame")
-FlyToggleCircle.Name = "FlyToggleCircle"
-FlyToggleCircle.Size = UDim2.new(0, 21, 0, 21)
-FlyToggleCircle.Position = UDim2.new(0, 2, 0.5, -10.5)
-FlyToggleCircle.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
-FlyToggleCircle.BorderSizePixel = 0
-
-local FlyToggleCircleCorner = Instance.new("UICorner")
-FlyToggleCircleCorner.CornerRadius = UDim.new(0, 10)
-FlyToggleCircleCorner.Parent = FlyToggleCircle
-
-FlyToggleCircle.Parent = FlyToggle
-FlyToggle.Parent = FlyFrame
-
-local FlyDescription = Instance.new("TextLabel")
-FlyDescription.Name = "FlyDescription"
-FlyDescription.Size = UDim2.new(0, 300, 0, 20)
-FlyDescription.Position = UDim2.new(0, 0, 0, 40)
-FlyDescription.BackgroundTransparency = 1
-FlyDescription.Text = "Turning It On Enables Flight"
-FlyDescription.TextColor3 = Color3.fromRGB(255, 255, 255)
-FlyDescription.TextTransparency = 0.5
-FlyDescription.Font = Enum.Font.Gotham
-FlyDescription.TextSize = 12
-FlyDescription.TextXAlignment = Enum.TextXAlignment.Left
-FlyDescription.Parent = FlyFrame
-
--- Close and Minimize buttons
-local CloseButton = Instance.new("TextButton")
-CloseButton.Name = "CloseButton"
-CloseButton.Size = UDim2.new(0, 30, 0, 30)
-CloseButton.Position = UDim2.new(1, -40, 0, 10)
-CloseButton.BackgroundColor3 = Color3.fromRGB(255, 60, 60)
-CloseButton.Text = "X"
-CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-CloseButton.Font = Enum.Font.GothamBold
-CloseButton.TextSize = 16
-
-local CloseButtonCorner = Instance.new("UICorner")
-CloseButtonCorner.CornerRadius = UDim.new(0, 6)
-CloseButtonCorner.Parent = CloseButton
-
-CloseButton.Parent = MainFrame
-
-local MinimizeButton = Instance.new("TextButton")
-MinimizeButton.Name = "MinimizeButton"
-MinimizeButton.Size = UDim2.new(0, 30, 0, 30)
-MinimizeButton.Position = UDim2.new(1, -80, 0, 10)
-MinimizeButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-MinimizeButton.Text = "_"
-MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-MinimizeButton.Font = Enum.Font.GothamBold
-MinimizeButton.TextSize = 16
-
-local MinimizeButtonCorner = Instance.new("UICorner")
-MinimizeButtonCorner.CornerRadius = UDim.new(0, 6)
-MinimizeButtonCorner.Parent = MinimizeButton
-
-MinimizeButton.Parent = MainFrame
-
--- Draggable button (hidden initially)
-local DragButton = Instance.new("TextButton")
-DragButton.Name = "DragButton"
-DragButton.Size = UDim2.new(0, 100, 0, 40)
-DragButton.Position = UDim2.new(0, 10, 0, 10)
-DragButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-DragButton.BackgroundTransparency = 0.1
-DragButton.Text = "E🌙"
-DragButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-DragButton.Font = Enum.Font.GothamBold
-DragButton.TextSize = 16
-DragButton.Visible = false
-
-local DragButtonCorner = Instance.new("UICorner")
-DragButtonCorner.CornerRadius = UDim.new(0, 12)
-DragButtonCorner.Parent = DragButton
-
-DragButton.Parent = ScreenGui
-
--- Toggle states
-local speedEnabled = false
-local flyEnabled = false
-local minimized = false
-
--- Speed toggle functionality
-SpeedToggle.MouseButton1Click:Connect(function()
-    speedEnabled = not speedEnabled
-    
-    if speedEnabled then
-        humanoid.WalkSpeed = 50
-        SpeedToggleCircle:TweenPosition(UDim2.new(1, -23, 0.5, -10.5), "Out", "Quad", 0.2, true)
-        SpeedToggle.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
-    else
-        humanoid.WalkSpeed = 16
-        SpeedToggleCircle:TweenPosition(UDim2.new(0, 2, 0.5, -10.5), "Out", "Quad", 0.2, true)
-        SpeedToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    end
-end)
-
--- Fly toggle functionality
-local flyParts = {}
-
-FlyToggle.MouseButton1Click:Connect(function()
-    flyEnabled = not flyEnabled
-    
-    if flyEnabled then
-        FlyToggleCircle:TweenPosition(UDim2.new(1, -23, 0.5, -10.5), "Out", "Quad", 0.2, true)
-        FlyToggle.BackgroundColor3 = Color3.fromRGB(100, 200, 100)
-        
-        -- Create fly parts
-        local torso = character:FindFirstChild("HumanoidRootPart") or character:FindFirstChild("Torso")
-        if torso then
-            local bg = Instance.new("BodyGyro", torso)
-            bg.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
-            bg.P = 10000
-            
-            local bv = Instance.new("BodyVelocity", torso)
-            bv.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-            bv.Velocity = Vector3.new(0, 0, 0)
-            
-            flyParts = {bg, bv}
-        end
-    else
-        FlyToggleCircle:TweenPosition(UDim2.new(0, 2, 0.5, -10.5), "Out", "Quad", 0.2, true)
-        FlyToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-        
-        -- Remove fly parts
-        for _, part in pairs(flyParts) do
-            if part then
-                part:Destroy()
-            end
-        end
-        flyParts = {}
-    end
-end)
-
--- Fly controls
-local flying = false
-local flySpeed = 1
-
-UserInputService.InputBegan:Connect(function(input, gameProcessed)
-    if not flyEnabled or gameProcessed then return end
-    
-    local torso = character:FindFirstChild("HumanoidRootPart") or character:FindFirstChild("Torso")
-    if not torso or not flyParts[2] then return end
-    
-    if input.KeyCode == Enum.KeyCode.Space then
-        flyParts[2].Velocity = Vector3.new(0, 50 * flySpeed, 0)
-        flying = true
-    elseif input.KeyCode == Enum.KeyCode.LeftShift then
-        flyParts[2].Velocity = Vector3.new(0, -50 * flySpeed, 0)
-        flying = true
-    elseif input.KeyCode == Enum.KeyCode.W then
-        flyParts[2].Velocity = torso.CFrame.LookVector * 50 * flySpeed
-        flying = true
-    elseif input.KeyCode == Enum.KeyCode.A then
-        flyParts[2].Velocity = -torso.CFrame.RightVector * 50 * flySpeed
-        flying = true
-    elseif input.KeyCode == Enum.KeyCode.S then
-        flyParts[2].Velocity = -torso.CFrame.LookVector * 50 * flySpeed
-        flying = true
-    elseif input.KeyCode == Enum.KeyCode.D then
-        flyParts[2].Velocity = torso.CFrame.RightVector * 50 * flySpeed
-        flying = true
-    end
-end)
-
-UserInputService.InputEnded:Connect(function(input, gameProcessed)
-    if not flyEnabled or gameProcessed then return end
-    
-    if input.KeyCode == Enum.KeyCode.Space or input.KeyCode == Enum.KeyCode.LeftShift or
-       input.KeyCode == Enum.KeyCode.W or input.KeyCode == Enum.KeyCode.A or
-       input.KeyCode == Enum.KeyCode.S or input.KeyCode == Enum.KeyCode.D then
-        if flyParts[2] then
-            flyParts[2].Velocity = Vector3.new(0, 0, 0)
-        end
-        flying = false
-    end
-end)
-
--- Close button functionality
-CloseButton.MouseButton1Click:Connect(function()
-    local confirmFrame = Instance.new("Frame")
-    confirmFrame.Name = "ConfirmFrame"
-    confirmFrame.Size = UDim2.new(0, 250, 0, 120)
-    confirmFrame.Position = UDim2.new(0.5, -125, 0.5, -60)
-    confirmFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    confirmFrame.BorderSizePixel = 0
-    
-    local confirmCorner = Instance.new("UICorner")
-    confirmCorner.CornerRadius = UDim.new(0, 8)
-    confirmCorner.Parent = confirmFrame
-    
-    local confirmText = Instance.new("TextLabel")
-    confirmText.Name = "ConfirmText"
-    confirmText.Size = UDim2.new(0, 230, 0, 50)
-    confirmText.Position = UDim2.new(0.5, -115, 0, 10)
-    confirmText.BackgroundTransparency = 1
-    confirmText.Text = "Are you sure you want to close ECLIPSE HUB?"
-    confirmText.TextColor3 = Color3.fromRGB(255, 255, 255)
-    confirmText.Font = Enum.Font.Gotham
-    confirmText.TextSize = 16
-    confirmText.TextWrapped = true
-    confirmText.Parent = confirmFrame
-    
-    local yesButton = Instance.new("TextButton")
-    yesButton.Name = "YesButton"
-    yesButton.Size = UDim2.new(0, 100, 0, 30)
-    yesButton.Position = UDim2.new(0.5, -110, 0, 70)
-    yesButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    yesButton.Text = "Yes"
-    yesButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    yesButton.Font = Enum.Font.Gotham
-    yesButton.TextSize = 14
-    
-    local yesCorner = Instance.new("UICorner")
-    yesCorner.CornerRadius = UDim.new(0, 6)
-    yesCorner.Parent = yesButton
-    
-    yesButton.Parent = confirmFrame
-    
-    local noButton = Instance.new("TextButton")
-    noButton.Name = "NoButton"
-    noButton.Size = UDim2.new(0, 100, 0, 30)
-    noButton.Position = UDim2.new(0.5, 10, 0, 70)
-    noButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    noButton.Text = "No"
-    noButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    noButton.Font = Enum.Font.Gotham
-    noButton.TextSize = 14
-    
-    local noCorner = Instance.new("UICorner")
-    noCorner.CornerRadius = UDim.new(0, 6)
-    noCorner.Parent = noButton
-    
-    noButton.Parent = confirmFrame
-    
-    confirmFrame.Parent = MainFrame
-    
-    yesButton.MouseButton1Click:Connect(function()
-        ScreenGui:Destroy()
-    end)
-    
-    noButton.MouseButton1Click:Connect(function()
-        confirmFrame:Destroy()
-    end)
-end)
-
--- Minimize button functionality
-MinimizeButton.MouseButton1Click:Connect(function()
-    minimized = not minimized
-    
-    if minimized then
-        MainFrame.Visible = false
-        DragButton.Visible = true
-    else
-        MainFrame.Visible = true
-        DragButton.Visible = false
-    end
-end)
-
--- Make DragButton draggable
-local dragInput, dragStart, startPos
-
-local function updateInput(input)
+local function update(input)
     local delta = input.Position - dragStart
-    DragButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
 
-DragButton.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragStart = input.Position
-        startPos = DragButton.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragInput = nil
-            end
-        end)
-    end
-end)
-
-DragButton.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-    if input == dragInput then
-        updateInput(input)
-    end
-end)
-
--- Make MainFrame draggable
 MainFrame.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
         dragStart = input.Position
         startPos = MainFrame.Position
+        
         input.Changed:Connect(function()
             if input.UserInputState == Enum.UserInputState.End then
-                dragInput = nil
+                dragging = false
             end
         end)
     end
@@ -474,20 +56,291 @@ MainFrame.InputChanged:Connect(function(input)
     end
 end)
 
--- Character handling
-localPlayer.CharacterAdded:Connect(function(newChar)
-    character = newChar
-    humanoid = newChar:WaitForChild("Humanoid")
-    
-    if speedEnabled then
-        humanoid.WalkSpeed = 50
-    else
-        humanoid.WalkSpeed = 16
-    end
-    
-    if flyEnabled then
-        FlyToggle.MouseButton1Click()
-        task.wait()
-        FlyToggle.MouseButton1Click()
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
     end
 end)
+
+-- Title bar
+local TitleBar = Instance.new("Frame")
+TitleBar.Name = "TitleBar"
+TitleBar.Size = UDim2.new(1, 0, 0, 40)
+TitleBar.Position = UDim2.new(0, 0, 0, 0)
+TitleBar.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+TitleBar.BorderSizePixel = 0
+TitleBar.Parent = MainFrame
+
+local UICorner2 = Instance.new("UICorner")
+UICorner2.CornerRadius = UDim.new(0, 12)
+UICorner2.Parent = TitleBar
+
+-- Title text
+local Title = Instance.new("TextLabel")
+Title.Name = "Title"
+Title.Size = UDim2.new(0, 200, 0, 30)
+Title.Position = UDim2.new(0, 10, 0, 5)
+Title.BackgroundTransparency = 1
+Title.Text = "ECLIPSE HUB 🌙"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 20
+Title.Font = Enum.Font.GothamBold
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Parent = TitleBar
+
+-- Made by text
+local MadeBy = Instance.new("TextLabel")
+MadeBy.Name = "MadeBy"
+MadeBy.Size = UDim2.new(0, 100, 0, 20)
+MadeBy.Position = UDim2.new(1, -110, 0, 10)
+MadeBy.BackgroundTransparency = 1
+MadeBy.Text = "Made By NKDev"
+MadeBy.TextColor3 = Color3.fromRGB(255, 255, 255)
+MadeBy.TextTransparency = 0.5
+MadeBy.TextSize = 12
+MadeBy.Font = Enum.Font.Gotham
+MadeBy.TextXAlignment = Enum.TextXAlignment.Right
+MadeBy.Parent = TitleBar
+
+-- Content frame
+local ContentFrame = Instance.new("Frame")
+ContentFrame.Name = "ContentFrame"
+ContentFrame.Size = UDim2.new(1, -20, 1, -60)
+ContentFrame.Position = UDim2.new(0, 10, 0, 50)
+ContentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+ContentFrame.BorderSizePixel = 0
+ContentFrame.Parent = MainFrame
+
+local UICorner3 = Instance.new("UICorner")
+UICorner3.CornerRadius = UDim.new(0, 8)
+UICorner3.Parent = ContentFrame
+
+-- Speed toggle
+local SpeedFrame = Instance.new("Frame")
+SpeedFrame.Name = "SpeedFrame"
+SpeedFrame.Size = UDim2.new(1, -20, 0, 40)
+SpeedFrame.Position = UDim2.new(0, 10, 0, 10)
+SpeedFrame.BackgroundTransparency = 1
+SpeedFrame.Parent = ContentFrame
+
+local SpeedLabel = Instance.new("TextLabel")
+SpeedLabel.Name = "SpeedLabel"
+SpeedLabel.Size = UDim2.new(0, 150, 1, 0)
+SpeedLabel.Position = UDim2.new(0, 0, 0, 0)
+SpeedLabel.BackgroundTransparency = 1
+SpeedLabel.Text = "Increase Speed"
+SpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedLabel.TextSize = 16
+SpeedLabel.Font = Enum.Font.Gotham
+SpeedLabel.TextXAlignment = Enum.TextXAlignment.Left
+SpeedLabel.Parent = SpeedFrame
+
+local SpeedToggle = Instance.new("TextButton")
+SpeedToggle.Name = "SpeedToggle"
+SpeedToggle.Size = UDim2.new(0, 50, 0, 25)
+SpeedToggle.Position = UDim2.new(1, -60, 0.5, -12)
+SpeedToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+SpeedToggle.Text = ""
+SpeedToggle.AutoButtonColor = false
+SpeedToggle.Parent = SpeedFrame
+
+local UICorner4 = Instance.new("UICorner")
+UICorner4.CornerRadius = UDim.new(0, 12)
+UICorner4.Parent = SpeedToggle
+
+local ToggleCircle = Instance.new("Frame")
+ToggleCircle.Name = "ToggleCircle"
+ToggleCircle.Size = UDim2.new(0, 21, 0, 21)
+ToggleCircle.Position = UDim2.new(0, 2, 0.5, -10)
+ToggleCircle.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+ToggleCircle.BorderSizePixel = 0
+ToggleCircle.Parent = SpeedToggle
+
+local UICorner5 = Instance.new("UICorner")
+UICorner5.CornerRadius = UDim.new(0.5, 0)
+UICorner5.Parent = ToggleCircle
+
+local SpeedDescription = Instance.new("TextLabel")
+SpeedDescription.Name = "SpeedDescription"
+SpeedDescription.Size = UDim2.new(1, -20, 0, 15)
+SpeedDescription.Position = UDim2.new(0, 10, 0, 45)
+SpeedDescription.BackgroundTransparency = 1
+SpeedDescription.Text = "Turning It On Sets The Players Speed To 50"
+SpeedDescription.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedDescription.TextTransparency = 0.5
+SpeedDescription.TextSize = 12
+SpeedDescription.Font = Enum.Font.Gotham
+SpeedDescription.TextXAlignment = Enum.TextXAlignment.Left
+SpeedDescription.Parent = SpeedFrame
+
+-- Fly toggle
+local FlyFrame = Instance.new("Frame")
+FlyFrame.Name = "FlyFrame"
+FlyFrame.Size = UDim2.new(1, -20, 0, 40)
+FlyFrame.Position = UDim2.new(0, 10, 0, 90)
+FlyFrame.BackgroundTransparency = 1
+FlyFrame.Parent = ContentFrame
+
+local FlyLabel = Instance.new("TextLabel")
+FlyLabel.Name = "FlyLabel"
+FlyLabel.Size = UDim2.new(0, 150, 1, 0)
+FlyLabel.Position = UDim2.new(0, 0, 0, 0)
+FlyLabel.BackgroundTransparency = 1
+FlyLabel.Text = "Fly"
+FlyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlyLabel.TextSize = 16
+FlyLabel.Font = Enum.Font.Gotham
+FlyLabel.TextXAlignment = Enum.TextXAlignment.Left
+FlyLabel.Parent = FlyFrame
+
+local FlyToggle = Instance.new("TextButton")
+FlyToggle.Name = "FlyToggle"
+FlyToggle.Size = UDim2.new(0, 50, 0, 25)
+FlyToggle.Position = UDim2.new(1, -60, 0.5, -12)
+FlyToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+FlyToggle.Text = ""
+FlyToggle.AutoButtonColor = false
+FlyToggle.Parent = FlyFrame
+
+local UICorner6 = Instance.new("UICorner")
+UICorner6.CornerRadius = UDim.new(0, 12)
+UICorner6.Parent = FlyToggle
+
+local ToggleCircle2 = Instance.new("Frame")
+ToggleCircle2.Name = "ToggleCircle2"
+ToggleCircle2.Size = UDim2.new(0, 21, 0, 21)
+ToggleCircle2.Position = UDim2.new(0, 2, 0.5, -10)
+ToggleCircle2.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+ToggleCircle2.BorderSizePixel = 0
+ToggleCircle2.Parent = FlyToggle
+
+local UICorner7 = Instance.new("UICorner")
+UICorner7.CornerRadius = UDim.new(0.5, 0)
+UICorner7.Parent = ToggleCircle2
+
+local FlyDescription = Instance.new("TextLabel")
+FlyDescription.Name = "FlyDescription"
+FlyDescription.Size = UDim2.new(1, -20, 0, 15)
+FlyDescription.Position = UDim2.new(0, 10, 0, 45)
+FlyDescription.BackgroundTransparency = 1
+FlyDescription.Text = "Turning It On Enables Fly"
+FlyDescription.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlyDescription.TextTransparency = 0.5
+FlyDescription.TextSize = 12
+FlyDescription.Font = Enum.Font.Gotham
+FlyDescription.TextXAlignment = Enum.TextXAlignment.Left
+FlyDescription.Parent = FlyFrame
+
+-- Toggle functionality
+local speedEnabled = false
+local flyEnabled = false
+local flyBodyVelocity
+local flyBodyGyro
+
+SpeedToggle.MouseButton1Click:Connect(function()
+    speedEnabled = not speedEnabled
+    
+    if speedEnabled then
+        game:GetService("TweenService"):Create(ToggleCircle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
+        game:GetService("TweenService"):Create(SpeedToggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
+        
+        if Player.Character and Player.Character:FindFirstChild("Humanoid") then
+            Player.Character.Humanoid.WalkSpeed = 50
+        end
+    else
+        game:GetService("TweenService"):Create(ToggleCircle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
+        game:GetService("TweenService"):Create(SpeedToggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+        
+        if Player.Character and Player.Character:FindFirstChild("Humanoid") then
+            Player.Character.Humanoid.WalkSpeed = 16
+        end
+    end
+end)
+
+FlyToggle.MouseButton1Click:Connect(function()
+    flyEnabled = not flyEnabled
+    
+    if flyEnabled then
+        game:GetService("TweenService"):Create(ToggleCircle2, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
+        game:GetService("TweenService"):Create(FlyToggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
+        
+        -- Enable fly
+        if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+            local root = Player.Character.HumanoidRootPart
+            
+            flyBodyVelocity = Instance.new("BodyVelocity")
+            flyBodyVelocity.Velocity = Vector3.new(0, 0, 0)
+            flyBodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+            flyBodyVelocity.Parent = root
+            
+            flyBodyGyro = Instance.new("BodyGyro")
+            flyBodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+            flyBodyGyro.P = 10000
+            flyBodyGyro.D = 100
+            flyBodyGyro.CFrame = root.CFrame
+            flyBodyGyro.Parent = root
+            
+            local flySpeed = 0
+            local flyKeys = {}
+            
+            UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                if gameProcessed then return end
+                
+                if input.KeyCode == Enum.KeyCode.Space then
+                    flyKeys["Space"] = true
+                elseif input.KeyCode == Enum.KeyCode.LeftShift then
+                    flyKeys["LeftShift"] = true
+                end
+            end)
+            
+            UserInputService.InputEnded:Connect(function(input, gameProcessed)
+                if input.KeyCode == Enum.KeyCode.Space then
+                    flyKeys["Space"] = false
+                elseif input.KeyCode == Enum.KeyCode.LeftShift then
+                    flyKeys["LeftShift"] = false
+                end
+            end)
+            
+            RunService.Stepped:Connect(function()
+                if flyEnabled and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+                    local root = Player.Character.HumanoidRootPart
+                    
+                    if flyKeys["Space"] then
+                        flySpeed = flySpeed + 0.5
+                    elseif flyKeys["LeftShift"] then
+                        flySpeed = flySpeed - 0.5
+                    else
+                        flySpeed = flySpeed * 0.9
+                    end
+                    
+                    flyBodyVelocity.Velocity = Vector3.new(0, flySpeed, 0)
+                    flyBodyGyro.CFrame = workspace.CurrentCamera.CoordinateFrame
+                end
+            end)
+        end
+    else
+        game:GetService("TweenService"):Create(ToggleCircle2, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
+        game:GetService("TweenService"):Create(FlyToggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+        
+        -- Disable fly
+        if flyBodyVelocity then
+            flyBodyVelocity:Destroy()
+            flyBodyVelocity = nil
+        end
+        
+        if flyBodyGyro then
+            flyBodyGyro:Destroy()
+            flyBodyGyro = nil
+        end
+    end
+end)
+
+-- Character added event to reapply speed if needed
+Player.CharacterAdded:Connect(function(character)
+    if speedEnabled then
+        character:WaitForChild("Humanoid").WalkSpeed = 50
+    end
+end)
+
+-- Parent the main frame last to avoid visual glitches
+MainFrame.Parent = ScreenGui
