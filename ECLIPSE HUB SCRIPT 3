@@ -1,0 +1,420 @@
+-- Eclipse Hub 🌙 by NKDev
+local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoid = character:WaitForChild("Humanoid")
+
+-- Main GUI
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "EclipseHub"
+ScreenGui.Parent = game.CoreGui
+
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 350, 0, 250)
+MainFrame.Position = UDim2.new(0.5, -175, 0.5, -125)
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+MainFrame.BorderSizePixel = 0
+MainFrame.ClipsDescendants = true
+
+-- Rounded corners
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 12)
+UICorner.Parent = MainFrame
+
+-- Title
+local Title = Instance.new("TextLabel")
+Title.Name = "Title"
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.Position = UDim2.new(0, 0, 0, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "ECLIPSE HUB 🌙"
+Title.Font = Enum.Font.GothamBold
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 20
+Title.Parent = MainFrame
+
+-- Made by text
+local MadeBy = Instance.new("TextLabel")
+MadeBy.Name = "MadeBy"
+MadeBy.Size = UDim2.new(1, 0, 0, 20)
+MadeBy.Position = UDim2.new(0, 0, 0, 35)
+MadeBy.BackgroundTransparency = 1
+MadeBy.Text = "Made By NKDev"
+MadeBy.Font = Enum.Font.Gotham
+MadeBy.TextColor3 = Color3.fromRGB(255, 255, 255)
+MadeBy.TextTransparency = 0.5
+MadeBy.TextSize = 14
+MadeBy.Parent = MainFrame
+
+-- Panel
+local Panel = Instance.new("Frame")
+Panel.Name = "Panel"
+Panel.Size = UDim2.new(1, -20, 0, 170)
+Panel.Position = UDim2.new(0, 10, 0, 60)
+Panel.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+Panel.BorderSizePixel = 0
+Panel.Parent = MainFrame
+
+-- Panel rounded corners
+local PanelCorner = Instance.new("UICorner")
+PanelCorner.CornerRadius = UDim.new(0, 8)
+PanelCorner.Parent = Panel
+
+-- Speed feature
+local SpeedFrame = Instance.new("Frame")
+SpeedFrame.Name = "SpeedFrame"
+SpeedFrame.Size = UDim2.new(1, -20, 0, 30)
+SpeedFrame.Position = UDim2.new(0, 10, 0, 10)
+SpeedFrame.BackgroundTransparency = 1
+SpeedFrame.Parent = Panel
+
+local SpeedLabel = Instance.new("TextLabel")
+SpeedLabel.Name = "SpeedLabel"
+SpeedLabel.Size = UDim2.new(0.6, 0, 1, 0)
+SpeedLabel.Position = UDim2.new(0, 0, 0, 0)
+SpeedLabel.BackgroundTransparency = 1
+SpeedLabel.Text = "Increase Speed"
+SpeedLabel.Font = Enum.Font.Gotham
+SpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedLabel.TextSize = 14
+SpeedLabel.TextXAlignment = Enum.TextXAlignment.Left
+SpeedLabel.Parent = SpeedFrame
+
+local SpeedToggle = Instance.new("TextButton")
+SpeedToggle.Name = "SpeedToggle"
+SpeedToggle.Size = UDim2.new(0, 50, 0, 25)
+SpeedToggle.Position = UDim2.new(0.8, 0, 0, 2.5)
+SpeedToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+SpeedToggle.Text = "OFF"
+SpeedToggle.Font = Enum.Font.Gotham
+SpeedToggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedToggle.TextSize = 14
+SpeedToggle.Parent = SpeedFrame
+
+local SpeedToggleCorner = Instance.new("UICorner")
+SpeedToggleCorner.CornerRadius = UDim.new(0, 12)
+SpeedToggleCorner.Parent = SpeedToggle
+
+local SpeedDescription = Instance.new("TextLabel")
+SpeedDescription.Name = "SpeedDescription"
+SpeedDescription.Size = UDim2.new(1, -20, 0, 15)
+SpeedDescription.Position = UDim2.new(0, 10, 0, 40)
+SpeedDescription.BackgroundTransparency = 1
+SpeedDescription.Text = "Turning It On Sets The Players Speed To 50"
+SpeedDescription.Font = Enum.Font.Gotham
+SpeedDescription.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedDescription.TextTransparency = 0.5
+SpeedDescription.TextSize = 12
+SpeedDescription.TextXAlignment = Enum.TextXAlignment.Left
+SpeedDescription.Parent = Panel
+
+-- Fly feature
+local FlyFrame = Instance.new("Frame")
+FlyFrame.Name = "FlyFrame"
+FlyFrame.Size = UDim2.new(1, -20, 0, 30)
+FlyFrame.Position = UDim2.new(0, 10, 0, 70)
+FlyFrame.BackgroundTransparency = 1
+FlyFrame.Parent = Panel
+
+local FlyLabel = Instance.new("TextLabel")
+FlyLabel.Name = "FlyLabel"
+FlyLabel.Size = UDim2.new(0.6, 0, 1, 0)
+FlyLabel.Position = UDim2.new(0, 0, 0, 0)
+FlyLabel.BackgroundTransparency = 1
+FlyLabel.Text = "Fly"
+FlyLabel.Font = Enum.Font.Gotham
+FlyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlyLabel.TextSize = 14
+FlyLabel.TextXAlignment = Enum.TextXAlignment.Left
+FlyLabel.Parent = FlyFrame
+
+local FlyToggle = Instance.new("TextButton")
+FlyToggle.Name = "FlyToggle"
+FlyToggle.Size = UDim2.new(0, 50, 0, 25)
+FlyToggle.Position = UDim2.new(0.8, 0, 0, 2.5)
+FlyToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+FlyToggle.Text = "OFF"
+FlyToggle.Font = Enum.Font.Gotham
+FlyToggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlyToggle.TextSize = 14
+FlyToggle.Parent = FlyFrame
+
+local FlyToggleCorner = Instance.new("UICorner")
+FlyToggleCorner.CornerRadius = UDim.new(0, 12)
+FlyToggleCorner.Parent = FlyToggle
+
+local FlyDescription = Instance.new("TextLabel")
+FlyDescription.Name = "FlyDescription"
+FlyDescription.Size = UDim2.new(1, -20, 0, 15)
+FlyDescription.Position = UDim2.new(0, 10, 0, 100)
+FlyDescription.BackgroundTransparency = 1
+FlyDescription.Text = "Turning It On Enables Fly and Noclip"
+FlyDescription.Font = Enum.Font.Gotham
+FlyDescription.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlyDescription.TextTransparency = 0.5
+FlyDescription.TextSize = 12
+FlyDescription.TextXAlignment = Enum.TextXAlignment.Left
+FlyDescription.Parent = Panel
+
+-- Noclip feature
+local NoclipFrame = Instance.new("Frame")
+NoclipFrame.Name = "NoclipFrame"
+NoclipFrame.Size = UDim2.new(1, -20, 0, 30)
+NoclipFrame.Position = UDim2.new(0, 10, 0, 130)
+NoclipFrame.BackgroundTransparency = 1
+NoclipFrame.Parent = Panel
+
+local NoclipLabel = Instance.new("TextLabel")
+NoclipLabel.Name = "NoclipLabel"
+NoclipLabel.Size = UDim2.new(0.6, 0, 1, 0)
+NoclipLabel.Position = UDim2.new(0, 0, 0, 0)
+NoclipLabel.BackgroundTransparency = 1
+NoclipLabel.Text = "Noclip"
+NoclipLabel.Font = Enum.Font.Gotham
+NoclipLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+NoclipLabel.TextSize = 14
+NoclipLabel.TextXAlignment = Enum.TextXAlignment.Left
+NoclipLabel.Parent = NoclipFrame
+
+local NoclipToggle = Instance.new("TextButton")
+NoclipToggle.Name = "NoclipToggle"
+NoclipToggle.Size = UDim2.new(0, 50, 0, 25)
+NoclipToggle.Position = UDim2.new(0.8, 0, 0, 2.5)
+NoclipToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+NoclipToggle.Text = "OFF"
+NoclipToggle.Font = Enum.Font.Gotham
+NoclipToggle.TextColor3 = Color3.fromRGB(255, 255, 255)
+NoclipToggle.TextSize = 14
+NoclipToggle.Parent = NoclipFrame
+
+local NoclipToggleCorner = Instance.new("UICorner")
+NoclipToggleCorner.CornerRadius = UDim.new(0, 12)
+NoclipToggleCorner.Parent = NoclipToggle
+
+-- Make draggable
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+MainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+MainFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UIS.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
+    end
+end)
+
+-- Speed toggle functionality
+local speedEnabled = false
+SpeedToggle.MouseButton1Click:Connect(function()
+    speedEnabled = not speedEnabled
+    if speedEnabled then
+        SpeedToggle.Text = "ON"
+        SpeedToggle.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+        humanoid.WalkSpeed = 50
+    else
+        SpeedToggle.Text = "OFF"
+        SpeedToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        humanoid.WalkSpeed = 16
+    end
+end)
+
+-- Fly functionality
+local flyEnabled = false
+local flySpeed = 50
+local flyBV = nil
+local flyBG = nil
+local flyToggled = false
+
+local function enableFly()
+    if not character or not character:FindFirstChild("HumanoidRootPart") then return end
+    
+    local root = character.HumanoidRootPart
+    
+    -- Create body velocity and gyro if they don't exist
+    if not flyBV then
+        flyBV = Instance.new("BodyVelocity")
+        flyBV.Name = "FlyBodyVelocity"
+        flyBV.MaxForce = Vector3.new(0, 0, 0)
+        flyBV.Velocity = Vector3.new(0, 0, 0)
+        flyBV.Parent = root
+    end
+    
+    if not flyBG then
+        flyBG = Instance.new("BodyGyro")
+        flyBG.Name = "FlyBodyGyro"
+        flyBG.MaxTorque = Vector3.new(0, 0, 0)
+        flyBG.P = 1000
+        flyBG.D = 50
+        flyBG.CFrame = root.CFrame
+        flyBG.Parent = root
+    end
+    
+    flyToggled = true
+    humanoid:ChangeState(Enum.HumanoidStateType.Flying)
+    
+    -- Enable noclip when flying
+    for _, part in pairs(character:GetDescendants()) do
+        if part:IsA("BasePart") then
+            part.CanCollide = false
+        end
+    end
+    
+    -- Control flying with keys
+    local control = {}
+    control.Forward = false
+    control.Backward = false
+    control.Left = false
+    control.Right = false
+    control.Up = false
+    control.Down = false
+    
+    local flyConnection = UIS.InputBegan:Connect(function(input, gameProcessed)
+        if gameProcessed then return end
+        
+        if input.KeyCode == Enum.KeyCode.W then
+            control.Forward = true
+        elseif input.KeyCode == Enum.KeyCode.S then
+            control.Backward = true
+        elseif input.KeyCode == Enum.KeyCode.A then
+            control.Left = true
+        elseif input.KeyCode == Enum.KeyCode.D then
+            control.Right = true
+        elseif input.KeyCode == Enum.KeyCode.Space then
+            control.Up = true
+        elseif input.KeyCode == Enum.KeyCode.LeftShift then
+            control.Down = true
+        end
+    end)
+    
+    local flyEndConnection = UIS.InputEnded:Connect(function(input, gameProcessed)
+        if gameProcessed then return end
+        
+        if input.KeyCode == Enum.KeyCode.W then
+            control.Forward = false
+        elseif input.KeyCode == Enum.KeyCode.S then
+            control.Backward = false
+        elseif input.KeyCode == Enum.KeyCode.A then
+            control.Left = false
+        elseif input.KeyCode == Enum.KeyCode.D then
+            control.Right = false
+        elseif input.KeyCode == Enum.KeyCode.Space then
+            control.Up = false
+        elseif input.KeyCode == Enum.KeyCode.LeftShift then
+            control.Down = false
+        end
+    end)
+    
+    -- Update fly velocity
+    game:GetService("RunService").Heartbeat:Connect(function()
+        if not flyToggled or not character or not root then
+            flyConnection:Disconnect()
+            flyEndConnection:Disconnect()
+            return
+        end
+        
+        local cam = workspace.CurrentCamera.CFrame
+        local move = Vector3.new()
+        
+        if control.Forward then move = move + (cam.LookVector * flySpeed) end
+        if control.Backward then move = move - (cam.LookVector * flySpeed) end
+        if control.Left then move = move - (cam.RightVector * flySpeed) end
+        if control.Right then move = move + (cam.RightVector * flySpeed) end
+        if control.Up then move = move + Vector3.new(0, flySpeed, 0) end
+        if control.Down then move = move - Vector3.new(0, flySpeed, 0) end
+        
+        if move.Magnitude > 0 then
+            move = move.Unit * flySpeed
+            flyBV.Velocity = Vector3.new(move.X, move.Y, move.Z)
+            flyBG.CFrame = cam
+        else
+            flyBV.Velocity = Vector3.new()
+        end
+    end)
+end
+
+local function disableFly()
+    flyToggled = false
+    if flyBV then flyBV:Destroy() flyBV = nil end
+    if flyBG then flyBG:Destroy() flyBG = nil end
+    if humanoid then humanoid:ChangeState(Enum.HumanoidStateType.Running) end
+    
+    -- Disable noclip when not flying
+    if character then
+        for _, part in pairs(character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = true
+            end
+        end
+    end
+end
+
+FlyToggle.MouseButton1Click:Connect(function()
+    flyEnabled = not flyEnabled
+    if flyEnabled then
+        FlyToggle.Text = "ON"
+        FlyToggle.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+        NoclipToggle.Text = "ON"
+        NoclipToggle.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+        enableFly()
+    else
+        FlyToggle.Text = "OFF"
+        FlyToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        NoclipToggle.Text = "OFF"
+        NoclipToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+        disableFly()
+    end
+end)
+
+-- Noclip toggle functionality (linked to fly)
+NoclipToggle.MouseButton1Click:Connect(function()
+    -- Noclip is automatically enabled with fly, so just show a message
+    game.StarterGui:SetCore("SendNotification", {
+        Title = "Eclipse Hub",
+        Text = "Noclip is automatically enabled with Fly",
+        Duration = 3
+    })
+end)
+
+-- Handle character respawns
+player.CharacterAdded:Connect(function(newChar)
+    character = newChar
+    humanoid = newChar:WaitForChild("Humanoid")
+    
+    if speedEnabled then
+        humanoid.WalkSpeed = 50
+    end
+    
+    if flyEnabled then
+        enableFly()
+    end
+end)
+
+ScreenGui.Parent = game.CoreGui
