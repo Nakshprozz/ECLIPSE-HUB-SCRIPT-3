@@ -1,5 +1,6 @@
 -- ECLIPSE HUB 🌙
 -- Made By NKDev
+-- Enhanced with Long Jump and Scrollable UI
 
 local Player = game:GetService("Players").LocalPlayer
 local UserInputService = game:GetService("UserInputService")
@@ -14,8 +15,8 @@ ScreenGui.Parent = game:GetService("CoreGui")
 -- Main frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 350, 0, 250)
-MainFrame.Position = UDim2.new(0.5, -175, 0.5, -125)
+MainFrame.Size = UDim2.new(0, 350, 0, 300)  -- Increased height
+MainFrame.Position = UDim2.new(0.5, -175, 0.5, -150)
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 MainFrame.BorderSizePixel = 0
 MainFrame.ClipsDescendants = true
@@ -102,30 +103,44 @@ MadeBy.Font = Enum.Font.Gotham
 MadeBy.TextXAlignment = Enum.TextXAlignment.Right
 MadeBy.Parent = TitleBar
 
--- Content frame
-local ContentFrame = Instance.new("Frame")
-ContentFrame.Name = "ContentFrame"
-ContentFrame.Size = UDim2.new(1, -20, 1, -60)
-ContentFrame.Position = UDim2.new(0, 10, 0, 50)
-ContentFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-ContentFrame.BorderSizePixel = 0
-ContentFrame.Parent = MainFrame
+-- Scrollable content frame
+local ScrollFrame = Instance.new("ScrollingFrame")
+ScrollFrame.Name = "ScrollFrame"
+ScrollFrame.Size = UDim2.new(1, -20, 1, -60)
+ScrollFrame.Position = UDim2.new(0, 10, 0, 50)
+ScrollFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+ScrollFrame.BorderSizePixel = 0
+ScrollFrame.ScrollBarThickness = 5
+ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 400)  -- Adjust based on content
+ScrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+ScrollFrame.Parent = MainFrame
 
 local UICorner3 = Instance.new("UICorner")
 UICorner3.CornerRadius = UDim.new(0, 8)
-UICorner3.Parent = ContentFrame
+UICorner3.Parent = ScrollFrame
+
+-- Content frame to hold all elements
+local ContentFrame = Instance.new("Frame")
+ContentFrame.Name = "ContentFrame"
+ContentFrame.Size = UDim2.new(1, 0, 1, 0)
+ContentFrame.BackgroundTransparency = 1
+ContentFrame.Parent = ScrollFrame
+
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Padding = UDim.new(0, 10)
+UIListLayout.Parent = ContentFrame
 
 -- Speed toggle
 local SpeedFrame = Instance.new("Frame")
 SpeedFrame.Name = "SpeedFrame"
-SpeedFrame.Size = UDim2.new(1, -20, 0, 40)
+SpeedFrame.Size = UDim2.new(1, -20, 0, 60)
 SpeedFrame.Position = UDim2.new(0, 10, 0, 10)
 SpeedFrame.BackgroundTransparency = 1
 SpeedFrame.Parent = ContentFrame
 
 local SpeedLabel = Instance.new("TextLabel")
 SpeedLabel.Name = "SpeedLabel"
-SpeedLabel.Size = UDim2.new(0, 150, 1, 0)
+SpeedLabel.Size = UDim2.new(0, 150, 0, 30)
 SpeedLabel.Position = UDim2.new(0, 0, 0, 0)
 SpeedLabel.BackgroundTransparency = 1
 SpeedLabel.Text = "Increase Speed"
@@ -138,7 +153,7 @@ SpeedLabel.Parent = SpeedFrame
 local SpeedToggle = Instance.new("TextButton")
 SpeedToggle.Name = "SpeedToggle"
 SpeedToggle.Size = UDim2.new(0, 50, 0, 25)
-SpeedToggle.Position = UDim2.new(1, -60, 0.5, -12)
+SpeedToggle.Position = UDim2.new(1, -60, 0, 2)
 SpeedToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 SpeedToggle.Text = ""
 SpeedToggle.AutoButtonColor = false
@@ -162,10 +177,10 @@ UICorner5.Parent = ToggleCircle
 
 local SpeedDescription = Instance.new("TextLabel")
 SpeedDescription.Name = "SpeedDescription"
-SpeedDescription.Size = UDim2.new(1, -20, 0, 15)
-SpeedDescription.Position = UDim2.new(0, 10, 0, 45)
+SpeedDescription.Size = UDim2.new(1, -20, 0, 20)
+SpeedDescription.Position = UDim2.new(0, 0, 0, 30)
 SpeedDescription.BackgroundTransparency = 1
-SpeedDescription.Text = "Turning It On Sets The Players Speed To 50"
+SpeedDescription.Text = "Sets the player's walk speed to 50 (default is 16)"
 SpeedDescription.TextColor3 = Color3.fromRGB(255, 255, 255)
 SpeedDescription.TextTransparency = 0.5
 SpeedDescription.TextSize = 12
@@ -176,14 +191,14 @@ SpeedDescription.Parent = SpeedFrame
 -- Fly toggle
 local FlyFrame = Instance.new("Frame")
 FlyFrame.Name = "FlyFrame"
-FlyFrame.Size = UDim2.new(1, -20, 0, 40)
-FlyFrame.Position = UDim2.new(0, 10, 0, 90)
+FlyFrame.Size = UDim2.new(1, -20, 0, 60)
+FlyFrame.Position = UDim2.new(0, 10, 0, 80)
 FlyFrame.BackgroundTransparency = 1
 FlyFrame.Parent = ContentFrame
 
 local FlyLabel = Instance.new("TextLabel")
 FlyLabel.Name = "FlyLabel"
-FlyLabel.Size = UDim2.new(0, 150, 1, 0)
+FlyLabel.Size = UDim2.new(0, 150, 0, 30)
 FlyLabel.Position = UDim2.new(0, 0, 0, 0)
 FlyLabel.BackgroundTransparency = 1
 FlyLabel.Text = "Fly"
@@ -196,7 +211,7 @@ FlyLabel.Parent = FlyFrame
 local FlyToggle = Instance.new("TextButton")
 FlyToggle.Name = "FlyToggle"
 FlyToggle.Size = UDim2.new(0, 50, 0, 25)
-FlyToggle.Position = UDim2.new(1, -60, 0.5, -12)
+FlyToggle.Position = UDim2.new(1, -60, 0, 2)
 FlyToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 FlyToggle.Text = ""
 FlyToggle.AutoButtonColor = false
@@ -220,10 +235,10 @@ UICorner7.Parent = ToggleCircle2
 
 local FlyDescription = Instance.new("TextLabel")
 FlyDescription.Name = "FlyDescription"
-FlyDescription.Size = UDim2.new(1, -20, 0, 15)
-FlyDescription.Position = UDim2.new(0, 10, 0, 45)
+FlyDescription.Size = UDim2.new(1, -20, 0, 20)
+FlyDescription.Position = UDim2.new(0, 0, 0, 30)
 FlyDescription.BackgroundTransparency = 1
-FlyDescription.Text = "Turning It On Enables Fly"
+FlyDescription.Text = "Press Space to ascend, Left Shift to descend"
 FlyDescription.TextColor3 = Color3.fromRGB(255, 255, 255)
 FlyDescription.TextTransparency = 0.5
 FlyDescription.TextSize = 12
@@ -231,12 +246,72 @@ FlyDescription.Font = Enum.Font.Gotham
 FlyDescription.TextXAlignment = Enum.TextXAlignment.Left
 FlyDescription.Parent = FlyFrame
 
+-- Long Jump toggle
+local LongJumpFrame = Instance.new("Frame")
+LongJumpFrame.Name = "LongJumpFrame"
+LongJumpFrame.Size = UDim2.new(1, -20, 0, 60)
+LongJumpFrame.Position = UDim2.new(0, 10, 0, 150)
+LongJumpFrame.BackgroundTransparency = 1
+LongJumpFrame.Parent = ContentFrame
+
+local LongJumpLabel = Instance.new("TextLabel")
+LongJumpLabel.Name = "LongJumpLabel"
+LongJumpLabel.Size = UDim2.new(0, 150, 0, 30)
+LongJumpLabel.Position = UDim2.new(0, 0, 0, 0)
+LongJumpLabel.BackgroundTransparency = 1
+LongJumpLabel.Text = "Long Jump"
+LongJumpLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+LongJumpLabel.TextSize = 16
+LongJumpLabel.Font = Enum.Font.Gotham
+LongJumpLabel.TextXAlignment = Enum.TextXAlignment.Left
+LongJumpLabel.Parent = LongJumpFrame
+
+local LongJumpToggle = Instance.new("TextButton")
+LongJumpToggle.Name = "LongJumpToggle"
+LongJumpToggle.Size = UDim2.new(0, 50, 0, 25)
+LongJumpToggle.Position = UDim2.new(1, -60, 0, 2)
+LongJumpToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+LongJumpToggle.Text = ""
+LongJumpToggle.AutoButtonColor = false
+LongJumpToggle.Parent = LongJumpFrame
+
+local UICorner8 = Instance.new("UICorner")
+UICorner8.CornerRadius = UDim.new(0, 12)
+UICorner8.Parent = LongJumpToggle
+
+local ToggleCircle3 = Instance.new("Frame")
+ToggleCircle3.Name = "ToggleCircle3"
+ToggleCircle3.Size = UDim2.new(0, 21, 0, 21)
+ToggleCircle3.Position = UDim2.new(0, 2, 0.5, -10)
+ToggleCircle3.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+ToggleCircle3.BorderSizePixel = 0
+ToggleCircle3.Parent = LongJumpToggle
+
+local UICorner9 = Instance.new("UICorner")
+UICorner9.CornerRadius = UDim.new(0.5, 0)
+UICorner9.Parent = ToggleCircle3
+
+local LongJumpDescription = Instance.new("TextLabel")
+LongJumpDescription.Name = "LongJumpDescription"
+LongJumpDescription.Size = UDim2.new(1, -20, 0, 20)
+LongJumpDescription.Position = UDim2.new(0, 0, 0, 30)
+LongJumpDescription.BackgroundTransparency = 1
+LongJumpDescription.Text = "Hold Jump key mid-air to gain extra horizontal distance"
+LongJumpDescription.TextColor3 = Color3.fromRGB(255, 255, 255)
+LongJumpDescription.TextTransparency = 0.5
+LongJumpDescription.TextSize = 12
+LongJumpDescription.Font = Enum.Font.Gotham
+LongJumpDescription.TextXAlignment = Enum.TextXAlignment.Left
+LongJumpDescription.Parent = LongJumpFrame
+
 -- Toggle functionality
 local speedEnabled = false
 local flyEnabled = false
+local longJumpEnabled = false
 local flyBodyVelocity
 local flyBodyGyro
 
+-- Speed toggle
 SpeedToggle.MouseButton1Click:Connect(function()
     speedEnabled = not speedEnabled
     
@@ -257,6 +332,7 @@ SpeedToggle.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Fly toggle
 FlyToggle.MouseButton1Click:Connect(function()
     flyEnabled = not flyEnabled
     
@@ -335,7 +411,55 @@ FlyToggle.MouseButton1Click:Connect(function()
     end
 end)
 
--- Character added event to reapply speed if needed
+-- Long Jump toggle
+LongJumpToggle.MouseButton1Click:Connect(function()
+    longJumpEnabled = not longJumpEnabled
+    
+    if longJumpEnabled then
+        game:GetService("TweenService"):Create(ToggleCircle3, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
+        game:GetService("TweenService"):Create(LongJumpToggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
+        
+        -- Enable long jump
+        local jumpBoost = 1.5
+        local isJumping = false
+        
+        UserInputService.InputBegan:Connect(function(input, gameProcessed)
+            if not longJumpEnabled or gameProcessed then return end
+            
+            if input.KeyCode == Enum.KeyCode.Space and Player.Character and Player.Character:FindFirstChild("Humanoid") then
+                local humanoid = Player.Character.Humanoid
+                if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+                    isJumping = true
+                    local root = Player.Character:FindFirstChild("HumanoidRootPart")
+                    if root then
+                        -- Apply forward force based on camera direction
+                        local camera = workspace.CurrentCamera
+                        local lookVector = camera.CFrame.LookVector
+                        lookVector = Vector3.new(lookVector.X, 0, lookVector.Z).Unit
+                        
+                        local bodyVelocity = Instance.new("BodyVelocity")
+                        bodyVelocity.Velocity = lookVector * (humanoid.WalkSpeed * jumpBoost)
+                        bodyVelocity.MaxForce = Vector3.new(10000, 0, 10000)
+                        bodyVelocity.Parent = root
+                        
+                        -- Clean up after short delay
+                        delay(0.5, function()
+                            if bodyVelocity and bodyVelocity.Parent then
+                                bodyVelocity:Destroy()
+                            end
+                            isJumping = false
+                        end)
+                    end
+                end
+            end
+        end)
+    else
+        game:GetService("TweenService"):Create(ToggleCircle3, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
+        game:GetService("TweenService"):Create(LongJumpToggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+    end
+end)
+
+-- Character added event to reapply settings if needed
 Player.CharacterAdded:Connect(function(character)
     if speedEnabled then
         character:WaitForChild("Humanoid").WalkSpeed = 50
