@@ -1,26 +1,22 @@
--- ULTIMATE ECLIPSE HUB 🌙
+-- ECLIPSE HUB 🌙
 -- Made By NKDev
--- Enhanced with All Features & Mobile Support
+-- Enhanced with Long Jump and Scrollable UI
 
 local Player = game:GetService("Players").LocalPlayer
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
-local Lighting = game:GetService("Lighting")
-local HttpService = game:GetService("HttpService")
-local CoreGui = game:GetService("CoreGui")
 
 -- Create main screen GUI
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "EclipseHub"
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-ScreenGui.Parent = CoreGui
+ScreenGui.Parent = game:GetService("CoreGui")
 
 -- Main frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 400, 0, 500)
-MainFrame.Position = UDim2.new(0.5, -200, 0.5, -250)
+MainFrame.Size = UDim2.new(0, 350, 0, 300)  -- Increased height
+MainFrame.Position = UDim2.new(0.5, -175, 0.5, -150)
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 MainFrame.BorderSizePixel = 0
 MainFrame.ClipsDescendants = true
@@ -31,15 +27,14 @@ UICorner.CornerRadius = UDim.new(0, 12)
 UICorner.Parent = MainFrame
 
 -- Make draggable
-local dragging, dragInput, dragStart, startPos
+local dragging
+local dragInput
+local dragStart
+local startPos
 
 local function update(input)
     local delta = input.Position - dragStart
     MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-end
-
-local function isMobile()
-    return UserInputService.TouchEnabled and not UserInputService.KeyboardEnabled
 end
 
 MainFrame.InputBegan:Connect(function(input)
@@ -87,9 +82,9 @@ Title.Name = "Title"
 Title.Size = UDim2.new(0, 200, 0, 30)
 Title.Position = UDim2.new(0, 10, 0, 5)
 Title.BackgroundTransparency = 1
-Title.Text = "ULTIMATE ECLIPSE HUB 🌙"
+Title.Text = "ECLIPSE HUB 🌙"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 18
+Title.TextSize = 20
 Title.Font = Enum.Font.GothamBold
 Title.TextXAlignment = Enum.TextXAlignment.Left
 Title.Parent = TitleBar
@@ -108,94 +103,21 @@ MadeBy.Font = Enum.Font.Gotham
 MadeBy.TextXAlignment = Enum.TextXAlignment.Right
 MadeBy.Parent = TitleBar
 
--- Search bar
-local SearchBar = Instance.new("TextBox")
-SearchBar.Name = "SearchBar"
-SearchBar.Size = UDim2.new(1, -20, 0, 30)
-SearchBar.Position = UDim2.new(0, 10, 0, 50)
-SearchBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-SearchBar.TextColor3 = Color3.fromRGB(255, 255, 255)
-SearchBar.PlaceholderText = "Search features..."
-SearchBar.PlaceholderColor3 = Color3.fromRGB(150, 150, 150)
-SearchBar.TextSize = 14
-SearchBar.Font = Enum.Font.Gotham
-SearchBar.ClearTextOnFocus = false
-SearchBar.TextXAlignment = Enum.TextXAlignment.Left
-SearchBar.Parent = MainFrame
-
-local SearchBarPadding = Instance.new("UIPadding")
-SearchBarPadding.PaddingLeft = UDim.new(0, 10)
-SearchBarPadding.Parent = SearchBar
-
-local SearchBarCorner = Instance.new("UICorner")
-SearchBarCorner.CornerRadius = UDim.new(0, 6)
-SearchBarCorner.Parent = SearchBar
-
--- Categories frame
-local CategoriesFrame = Instance.new("Frame")
-CategoriesFrame.Name = "CategoriesFrame"
-CategoriesFrame.Size = UDim2.new(1, -20, 0, 30)
-CategoriesFrame.Position = UDim2.new(0, 10, 0, 90)
-CategoriesFrame.BackgroundTransparency = 1
-CategoriesFrame.Parent = MainFrame
-
-local CategoriesList = Instance.new("UIListLayout")
-CategoriesList.FillDirection = Enum.FillDirection.Horizontal
-CategoriesList.Padding = UDim.new(0, 5)
-CategoriesList.Parent = CategoriesFrame
-
--- Create category buttons
-local categories = {"All", "Movement", "Visual", "Utility", "Character"}
-local selectedCategory = "All"
-
-for _, category in pairs(categories) do
-    local CategoryButton = Instance.new("TextButton")
-    CategoryButton.Name = category .. "Button"
-    CategoryButton.Size = UDim2.new(0, 70, 1, 0)
-    CategoryButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    CategoryButton.Text = category
-    CategoryButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CategoryButton.TextSize = 14
-    CategoryButton.Font = Enum.Font.Gotham
-    CategoryButton.AutoButtonColor = false
-    CategoryButton.Parent = CategoriesFrame
-    
-    local CategoryCorner = Instance.new("UICorner")
-    CategoryCorner.CornerRadius = UDim.new(0, 6)
-    CategoryCorner.Parent = CategoryButton
-    
-    CategoryButton.MouseButton1Click:Connect(function()
-        selectedCategory = category
-        updateFeatureVisibility()
-        for _, btn in pairs(CategoriesFrame:GetChildren()) do
-            if btn:IsA("TextButton") then
-                TweenService:Create(btn, TweenInfo.new(0.15), {
-                    BackgroundColor3 = btn.Text == category and Color3.fromRGB(80, 80, 80) or Color3.fromRGB(40, 40, 40)
-                }):Play()
-            end
-        end
-    end)
-    
-    if category == "All" then
-        CategoryButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-    end
-end
-
 -- Scrollable content frame
 local ScrollFrame = Instance.new("ScrollingFrame")
 ScrollFrame.Name = "ScrollFrame"
-ScrollFrame.Size = UDim2.new(1, -20, 1, -140)
-ScrollFrame.Position = UDim2.new(0, 10, 0, 130)
-ScrollFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+ScrollFrame.Size = UDim2.new(1, -20, 1, -60)
+ScrollFrame.Position = UDim2.new(0, 10, 0, 50)
+ScrollFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 ScrollFrame.BorderSizePixel = 0
 ScrollFrame.ScrollBarThickness = 5
+ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, 400)  -- Adjust based on content
 ScrollFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-ScrollFrame.ScrollBarImageColor3 = Color3.fromRGB(100, 100, 100)
 ScrollFrame.Parent = MainFrame
 
-local ScrollCorner = Instance.new("UICorner")
-ScrollCorner.CornerRadius = UDim.new(0, 8)
-ScrollCorner.Parent = ScrollFrame
+local UICorner3 = Instance.new("UICorner")
+UICorner3.CornerRadius = UDim.new(0, 8)
+UICorner3.Parent = ScrollFrame
 
 -- Content frame to hold all elements
 local ContentFrame = Instance.new("Frame")
@@ -204,593 +126,345 @@ ContentFrame.Size = UDim2.new(1, 0, 1, 0)
 ContentFrame.BackgroundTransparency = 1
 ContentFrame.Parent = ScrollFrame
 
-local ContentList = Instance.new("UIListLayout")
-ContentList.Padding = UDim.new(0, 10)
-ContentList.Parent = ContentFrame
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Padding = UDim.new(0, 10)
+UIListLayout.Parent = ContentFrame
 
--- Feature creation function
-local function createFeature(name, description, category, callback)
-    local FeatureFrame = Instance.new("Frame")
-    FeatureFrame.Name = name .. "Frame"
-    FeatureFrame.Size = UDim2.new(1, 0, 0, 60)
-    FeatureFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    FeatureFrame.Parent = ContentFrame
-    FeatureFrame.Visible = true
-    
-    local FeatureCorner = Instance.new("UICorner")
-    FeatureCorner.CornerRadius = UDim.new(0, 8)
-    FeatureCorner.Parent = FeatureFrame
-    
-    local FeatureLabel = Instance.new("TextLabel")
-    FeatureLabel.Name = "Label"
-    FeatureLabel.Size = UDim2.new(0, 200, 0, 30)
-    FeatureLabel.Position = UDim2.new(0, 10, 0, 5)
-    FeatureLabel.BackgroundTransparency = 1
-    FeatureLabel.Text = name
-    FeatureLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    FeatureLabel.TextSize = 16
-    FeatureLabel.Font = Enum.Font.Gotham
-    FeatureLabel.TextXAlignment = Enum.TextXAlignment.Left
-    FeatureLabel.Parent = FeatureFrame
-    
-    local FeatureToggle = Instance.new("TextButton")
-    FeatureToggle.Name = "Toggle"
-    FeatureToggle.Size = UDim2.new(0, 50, 0, 25)
-    FeatureToggle.Position = UDim2.new(1, -60, 0, 5)
-    FeatureToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-    FeatureToggle.Text = ""
-    FeatureToggle.AutoButtonColor = false
-    FeatureToggle.Parent = FeatureFrame
-    
-    local ToggleCorner = Instance.new("UICorner")
-    ToggleCorner.CornerRadius = UDim.new(0, 12)
-    ToggleCorner.Parent = FeatureToggle
-    
-    local ToggleCircle = Instance.new("Frame")
-    ToggleCircle.Name = "Circle"
-    ToggleCircle.Size = UDim2.new(0, 21, 0, 21)
-    ToggleCircle.Position = UDim2.new(0, 2, 0.5, -10)
-    ToggleCircle.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
-    ToggleCircle.BorderSizePixel = 0
-    ToggleCircle.Parent = FeatureToggle
-    
-    local CircleCorner = Instance.new("UICorner")
-    CircleCorner.CornerRadius = UDim.new(0.5, 0)
-    CircleCorner.Parent = ToggleCircle
-    
-    local FeatureDesc = Instance.new("TextLabel")
-    FeatureDesc.Name = "Description"
-    FeatureDesc.Size = UDim2.new(1, -20, 0, 20)
-    FeatureDesc.Position = UDim2.new(0, 10, 0, 35)
-    FeatureDesc.BackgroundTransparency = 1
-    FeatureDesc.Text = description
-    FeatureDesc.TextColor3 = Color3.fromRGB(200, 200, 200)
-    FeatureDesc.TextSize = 12
-    FeatureDesc.Font = Enum.Font.Gotham
-    FeatureDesc.TextXAlignment = Enum.TextXAlignment.Left
-    FeatureDesc.Parent = FeatureFrame
-    
-    -- Store category for filtering
-    FeatureFrame:SetAttribute("Category", category)
-    FeatureFrame:SetAttribute("SearchName", string.lower(name))
-    
-    FeatureToggle.MouseButton1Click:Connect(function()
-        callback(FeatureToggle, ToggleCircle)
-    end)
-    
-    return FeatureFrame
-end
+-- Speed toggle
+local SpeedFrame = Instance.new("Frame")
+SpeedFrame.Name = "SpeedFrame"
+SpeedFrame.Size = UDim2.new(1, -20, 0, 60)
+SpeedFrame.Position = UDim2.new(0, 10, 0, 10)
+SpeedFrame.BackgroundTransparency = 1
+SpeedFrame.Parent = ContentFrame
 
--- Update feature visibility based on search and category
-local function updateFeatureVisibility()
-    local searchText = string.lower(SearchBar.Text)
+local SpeedLabel = Instance.new("TextLabel")
+SpeedLabel.Name = "SpeedLabel"
+SpeedLabel.Size = UDim2.new(0, 150, 0, 30)
+SpeedLabel.Position = UDim2.new(0, 0, 0, 0)
+SpeedLabel.BackgroundTransparency = 1
+SpeedLabel.Text = "Increase Speed"
+SpeedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedLabel.TextSize = 16
+SpeedLabel.Font = Enum.Font.Gotham
+SpeedLabel.TextXAlignment = Enum.TextXAlignment.Left
+SpeedLabel.Parent = SpeedFrame
+
+local SpeedToggle = Instance.new("TextButton")
+SpeedToggle.Name = "SpeedToggle"
+SpeedToggle.Size = UDim2.new(0, 50, 0, 25)
+SpeedToggle.Position = UDim2.new(1, -60, 0, 2)
+SpeedToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+SpeedToggle.Text = ""
+SpeedToggle.AutoButtonColor = false
+SpeedToggle.Parent = SpeedFrame
+
+local UICorner4 = Instance.new("UICorner")
+UICorner4.CornerRadius = UDim.new(0, 12)
+UICorner4.Parent = SpeedToggle
+
+local ToggleCircle = Instance.new("Frame")
+ToggleCircle.Name = "ToggleCircle"
+ToggleCircle.Size = UDim2.new(0, 21, 0, 21)
+ToggleCircle.Position = UDim2.new(0, 2, 0.5, -10)
+ToggleCircle.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+ToggleCircle.BorderSizePixel = 0
+ToggleCircle.Parent = SpeedToggle
+
+local UICorner5 = Instance.new("UICorner")
+UICorner5.CornerRadius = UDim.new(0.5, 0)
+UICorner5.Parent = ToggleCircle
+
+local SpeedDescription = Instance.new("TextLabel")
+SpeedDescription.Name = "SpeedDescription"
+SpeedDescription.Size = UDim2.new(1, -20, 0, 20)
+SpeedDescription.Position = UDim2.new(0, 0, 0, 30)
+SpeedDescription.BackgroundTransparency = 1
+SpeedDescription.Text = "Sets the player's walk speed to 50 (default is 16)"
+SpeedDescription.TextColor3 = Color3.fromRGB(255, 255, 255)
+SpeedDescription.TextTransparency = 0.5
+SpeedDescription.TextSize = 12
+SpeedDescription.Font = Enum.Font.Gotham
+SpeedDescription.TextXAlignment = Enum.TextXAlignment.Left
+SpeedDescription.Parent = SpeedFrame
+
+-- Fly toggle
+local FlyFrame = Instance.new("Frame")
+FlyFrame.Name = "FlyFrame"
+FlyFrame.Size = UDim2.new(1, -20, 0, 60)
+FlyFrame.Position = UDim2.new(0, 10, 0, 80)
+FlyFrame.BackgroundTransparency = 1
+FlyFrame.Parent = ContentFrame
+
+local FlyLabel = Instance.new("TextLabel")
+FlyLabel.Name = "FlyLabel"
+FlyLabel.Size = UDim2.new(0, 150, 0, 30)
+FlyLabel.Position = UDim2.new(0, 0, 0, 0)
+FlyLabel.BackgroundTransparency = 1
+FlyLabel.Text = "Fly"
+FlyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlyLabel.TextSize = 16
+FlyLabel.Font = Enum.Font.Gotham
+FlyLabel.TextXAlignment = Enum.TextXAlignment.Left
+FlyLabel.Parent = FlyFrame
+
+local FlyToggle = Instance.new("TextButton")
+FlyToggle.Name = "FlyToggle"
+FlyToggle.Size = UDim2.new(0, 50, 0, 25)
+FlyToggle.Position = UDim2.new(1, -60, 0, 2)
+FlyToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+FlyToggle.Text = ""
+FlyToggle.AutoButtonColor = false
+FlyToggle.Parent = FlyFrame
+
+local UICorner6 = Instance.new("UICorner")
+UICorner6.CornerRadius = UDim.new(0, 12)
+UICorner6.Parent = FlyToggle
+
+local ToggleCircle2 = Instance.new("Frame")
+ToggleCircle2.Name = "ToggleCircle2"
+ToggleCircle2.Size = UDim2.new(0, 21, 0, 21)
+ToggleCircle2.Position = UDim2.new(0, 2, 0.5, -10)
+ToggleCircle2.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+ToggleCircle2.BorderSizePixel = 0
+ToggleCircle2.Parent = FlyToggle
+
+local UICorner7 = Instance.new("UICorner")
+UICorner7.CornerRadius = UDim.new(0.5, 0)
+UICorner7.Parent = ToggleCircle2
+
+local FlyDescription = Instance.new("TextLabel")
+FlyDescription.Name = "FlyDescription"
+FlyDescription.Size = UDim2.new(1, -20, 0, 20)
+FlyDescription.Position = UDim2.new(0, 0, 0, 30)
+FlyDescription.BackgroundTransparency = 1
+FlyDescription.Text = "Press Space to ascend, Left Shift to descend"
+FlyDescription.TextColor3 = Color3.fromRGB(255, 255, 255)
+FlyDescription.TextTransparency = 0.5
+FlyDescription.TextSize = 12
+FlyDescription.Font = Enum.Font.Gotham
+FlyDescription.TextXAlignment = Enum.TextXAlignment.Left
+FlyDescription.Parent = FlyFrame
+
+-- Long Jump toggle
+local LongJumpFrame = Instance.new("Frame")
+LongJumpFrame.Name = "LongJumpFrame"
+LongJumpFrame.Size = UDim2.new(1, -20, 0, 60)
+LongJumpFrame.Position = UDim2.new(0, 10, 0, 150)
+LongJumpFrame.BackgroundTransparency = 1
+LongJumpFrame.Parent = ContentFrame
+
+local LongJumpLabel = Instance.new("TextLabel")
+LongJumpLabel.Name = "LongJumpLabel"
+LongJumpLabel.Size = UDim2.new(0, 150, 0, 30)
+LongJumpLabel.Position = UDim2.new(0, 0, 0, 0)
+LongJumpLabel.BackgroundTransparency = 1
+LongJumpLabel.Text = "Long Jump"
+LongJumpLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+LongJumpLabel.TextSize = 16
+LongJumpLabel.Font = Enum.Font.Gotham
+LongJumpLabel.TextXAlignment = Enum.TextXAlignment.Left
+LongJumpLabel.Parent = LongJumpFrame
+
+local LongJumpToggle = Instance.new("TextButton")
+LongJumpToggle.Name = "LongJumpToggle"
+LongJumpToggle.Size = UDim2.new(0, 50, 0, 25)
+LongJumpToggle.Position = UDim2.new(1, -60, 0, 2)
+LongJumpToggle.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+LongJumpToggle.Text = ""
+LongJumpToggle.AutoButtonColor = false
+LongJumpToggle.Parent = LongJumpFrame
+
+local UICorner8 = Instance.new("UICorner")
+UICorner8.CornerRadius = UDim.new(0, 12)
+UICorner8.Parent = LongJumpToggle
+
+local ToggleCircle3 = Instance.new("Frame")
+ToggleCircle3.Name = "ToggleCircle3"
+ToggleCircle3.Size = UDim2.new(0, 21, 0, 21)
+ToggleCircle3.Position = UDim2.new(0, 2, 0.5, -10)
+ToggleCircle3.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+ToggleCircle3.BorderSizePixel = 0
+ToggleCircle3.Parent = LongJumpToggle
+
+local UICorner9 = Instance.new("UICorner")
+UICorner9.CornerRadius = UDim.new(0.5, 0)
+UICorner9.Parent = ToggleCircle3
+
+local LongJumpDescription = Instance.new("TextLabel")
+LongJumpDescription.Name = "LongJumpDescription"
+LongJumpDescription.Size = UDim2.new(1, -20, 0, 20)
+LongJumpDescription.Position = UDim2.new(0, 0, 0, 30)
+LongJumpDescription.BackgroundTransparency = 1
+LongJumpDescription.Text = "Hold Jump key mid-air to gain extra horizontal distance"
+LongJumpDescription.TextColor3 = Color3.fromRGB(255, 255, 255)
+LongJumpDescription.TextTransparency = 0.5
+LongJumpDescription.TextSize = 12
+LongJumpDescription.Font = Enum.Font.Gotham
+LongJumpDescription.TextXAlignment = Enum.TextXAlignment.Left
+LongJumpDescription.Parent = LongJumpFrame
+
+-- Toggle functionality
+local speedEnabled = false
+local flyEnabled = false
+local longJumpEnabled = false
+local flyBodyVelocity
+local flyBodyGyro
+
+-- Speed toggle
+SpeedToggle.MouseButton1Click:Connect(function()
+    speedEnabled = not speedEnabled
     
-    for _, feature in pairs(ContentFrame:GetChildren()) do
-        if feature:IsA("Frame") then
-            local matchesCategory = selectedCategory == "All" or feature:GetAttribute("Category") == selectedCategory
-            local matchesSearch = searchText == "" or string.find(feature:GetAttribute("SearchName"), searchText, 1, true)
-            
-            feature.Visible = matchesCategory and matchesSearch
+    if speedEnabled then
+        game:GetService("TweenService"):Create(ToggleCircle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
+        game:GetService("TweenService"):Create(SpeedToggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
+        
+        if Player.Character and Player.Character:FindFirstChild("Humanoid") then
+            Player.Character.Humanoid.WalkSpeed = 50
+        end
+    else
+        game:GetService("TweenService"):Create(ToggleCircle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
+        game:GetService("TweenService"):Create(SpeedToggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+        
+        if Player.Character and Player.Character:FindFirstChild("Humanoid") then
+            Player.Character.Humanoid.WalkSpeed = 16
         end
     end
-end
+end)
 
-SearchBar:GetPropertyChangedSignal("Text"):Connect(updateFeatureVisibility)
-
--- Feature implementations
-local features = {}
-
--- 1. Speed Toggle
-features.Speed = createFeature(
-    "Speed Hack", 
-    "Increases walk speed to 50 (default is 16)", 
-    "Movement",
-    function(toggle, circle)
-        features.Speed.Enabled = not features.Speed.Enabled
+-- Fly toggle
+FlyToggle.MouseButton1Click:Connect(function()
+    flyEnabled = not flyEnabled
+    
+    if flyEnabled then
+        game:GetService("TweenService"):Create(ToggleCircle2, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
+        game:GetService("TweenService"):Create(FlyToggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
         
-        if features.Speed.Enabled then
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
+        -- Enable fly
+        if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+            local root = Player.Character.HumanoidRootPart
             
-            if Player.Character and Player.Character:FindFirstChild("Humanoid") then
-                Player.Character.Humanoid.WalkSpeed = 50
-            end
-        else
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+            flyBodyVelocity = Instance.new("BodyVelocity")
+            flyBodyVelocity.Velocity = Vector3.new(0, 0, 0)
+            flyBodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+            flyBodyVelocity.Parent = root
             
-            if Player.Character and Player.Character:FindFirstChild("Humanoid") then
-                Player.Character.Humanoid.WalkSpeed = 16
-            end
-        end
-    end
-)
-
--- 2. Fly Toggle
-features.Fly = createFeature(
-    "Fly", 
-    "Press Space to ascend, Left Shift to descend", 
-    "Movement",
-    function(toggle, circle)
-        features.Fly.Enabled = not features.Fly.Enabled
-        
-        if features.Fly.Enabled then
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
+            flyBodyGyro = Instance.new("BodyGyro")
+            flyBodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
+            flyBodyGyro.P = 10000
+            flyBodyGyro.D = 100
+            flyBodyGyro.CFrame = root.CFrame
+            flyBodyGyro.Parent = root
             
-            -- Fly implementation
-            if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
-                local root = Player.Character.HumanoidRootPart
+            local flySpeed = 0
+            local flyKeys = {}
+            
+            UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                if gameProcessed then return end
                 
-                features.Fly.BodyVelocity = Instance.new("BodyVelocity")
-                features.Fly.BodyVelocity.Velocity = Vector3.new(0, 0, 0)
-                features.Fly.BodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
-                features.Fly.BodyVelocity.Parent = root
-                
-                features.Fly.BodyGyro = Instance.new("BodyGyro")
-                features.Fly.BodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
-                features.Fly.BodyGyro.P = 10000
-                features.Fly.BodyGyro.D = 100
-                features.Fly.BodyGyro.CFrame = root.CFrame
-                features.Fly.BodyGyro.Parent = root
-                
-                features.Fly.Speed = 0
-                features.Fly.Keys = {}
-                
-                features.Fly.InputBegan = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-                    if gameProcessed then return end
+                if input.KeyCode == Enum.KeyCode.Space then
+                    flyKeys["Space"] = true
+                elseif input.KeyCode == Enum.KeyCode.LeftShift then
+                    flyKeys["LeftShift"] = true
+                end
+            end)
+            
+            UserInputService.InputEnded:Connect(function(input, gameProcessed)
+                if input.KeyCode == Enum.KeyCode.Space then
+                    flyKeys["Space"] = false
+                elseif input.KeyCode == Enum.KeyCode.LeftShift then
+                    flyKeys["LeftShift"] = false
+                end
+            end)
+            
+            RunService.Stepped:Connect(function()
+                if flyEnabled and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
+                    local root = Player.Character.HumanoidRootPart
                     
-                    if input.KeyCode == Enum.KeyCode.Space then
-                        features.Fly.Keys["Space"] = true
-                    elseif input.KeyCode == Enum.KeyCode.LeftShift then
-                        features.Fly.Keys["LeftShift"] = true
+                    if flyKeys["Space"] then
+                        flySpeed = flySpeed + 0.5
+                    elseif flyKeys["LeftShift"] then
+                        flySpeed = flySpeed - 0.5
+                    else
+                        flySpeed = flySpeed * 0.9
                     end
-                end)
-                
-                features.Fly.InputEnded = UserInputService.InputEnded:Connect(function(input, gameProcessed)
-                    if input.KeyCode == Enum.KeyCode.Space then
-                        features.Fly.Keys["Space"] = false
-                    elseif input.KeyCode == Enum.KeyCode.LeftShift then
-                        features.Fly.Keys["LeftShift"] = false
-                    end
-                end)
-                
-                features.Fly.Stepped = RunService.Stepped:Connect(function()
-                    if features.Fly.Enabled and Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
-                        local root = Player.Character.HumanoidRootPart
-                        
-                        if features.Fly.Keys["Space"] then
-                            features.Fly.Speed = features.Fly.Speed + 0.5
-                        elseif features.Fly.Keys["LeftShift"] then
-                            features.Fly.Speed = features.Fly.Speed - 0.5
-                        else
-                            features.Fly.Speed = features.Fly.Speed * 0.9
-                        end
-                        
-                        features.Fly.BodyVelocity.Velocity = Vector3.new(0, features.Fly.Speed, 0)
-                        features.Fly.BodyGyro.CFrame = workspace.CurrentCamera.CoordinateFrame
-                    end
-                end)
-            end
-        else
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
-            
-            -- Clean up fly
-            if features.Fly.BodyVelocity then
-                features.Fly.BodyVelocity:Destroy()
-                features.Fly.BodyVelocity = nil
-            end
-            
-            if features.Fly.BodyGyro then
-                features.Fly.BodyGyro:Destroy()
-                features.Fly.BodyGyro = nil
-            end
-            
-            if features.Fly.InputBegan then
-                features.Fly.InputBegan:Disconnect()
-                features.Fly.InputBegan = nil
-            end
-            
-            if features.Fly.InputEnded then
-                features.Fly.InputEnded:Disconnect()
-                features.Fly.InputEnded = nil
-            end
-            
-            if features.Fly.Stepped then
-                features.Fly.Stepped:Disconnect()
-                features.Fly.Stepped = nil
-            end
-        end
-    end
-)
-
--- 3. No Clip Toggle
-features.NoClip = createFeature(
-    "No Clip", 
-    "Walk through walls and objects", 
-    "Movement",
-    function(toggle, circle)
-        features.NoClip.Enabled = not features.NoClip.Enabled
-        
-        if features.NoClip.Enabled then
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
-            
-            -- No clip implementation
-            if Player.Character then
-                for _, part in pairs(Player.Character:GetDescendants()) do
-                    if part:IsA("BasePart") then
-                        part.CanCollide = false
-                    end
-                end
-            end
-            
-            features.NoClip.Connection = Player.CharacterAdded:Connect(function(character)
-                if features.NoClip.Enabled then
-                    for _, part in pairs(character:GetDescendants()) do
-                        if part:IsA("BasePart") then
-                            part.CanCollide = false
-                        end
-                    end
-                end
-            end)
-        else
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
-            
-            -- Reset no clip
-            if Player.Character then
-                for _, part in pairs(Player.Character:GetDescendants()) do
-                    if part:IsA("BasePart") then
-                        part.CanCollide = true
-                    end
-                end
-            end
-            
-            if features.NoClip.Connection then
-                features.NoClip.Connection:Disconnect()
-                features.NoClip.Connection = nil
-            end
-        end
-    end
-)
-
--- 4. Super Jump
-features.SuperJump = createFeature(
-    "Super Jump", 
-    "Increased jump height (50 power)", 
-    "Movement",
-    function(toggle, circle)
-        features.SuperJump.Enabled = not features.SuperJump.Enabled
-        
-        if features.SuperJump.Enabled then
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
-            
-            if Player.Character and Player.Character:FindFirstChild("Humanoid") then
-                Player.Character.Humanoid.JumpPower = 50
-            end
-            
-            features.SuperJump.Connection = Player.CharacterAdded:Connect(function(character)
-                if features.SuperJump.Enabled then
-                    character:WaitForChild("Humanoid").JumpPower = 50
-                end
-            end)
-        else
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
-            
-            if Player.Character and Player.Character:FindFirstChild("Humanoid") then
-                Player.Character.Humanoid.JumpPower = 16
-            end
-            
-            if features.SuperJump.Connection then
-                features.SuperJump.Connection:Disconnect()
-                features.SuperJump.Connection = nil
-            end
-        end
-    end
-)
-
--- 5. ESP (Extra Sensory Perception)
-features.ESP = createFeature(
-    "ESP", 
-    "See players through walls with colored boxes", 
-    "Visual",
-    function(toggle, circle)
-        features.ESP.Enabled = not features.ESP.Enabled
-        
-        if features.ESP.Enabled then
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
-            
-            -- ESP implementation
-            features.ESP.Highlights = {}
-            
-            local function createESP(player)
-                if player ~= Player and player.Character then
-                    local highlight = Instance.new("Highlight")
-                    highlight.Adornee = player.Character
-                    highlight.FillTransparency = 0.8
-                    highlight.OutlineColor = player.TeamColor.Color
-                    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-                    highlight.Parent = player.Character
                     
-                    features.ESP.Highlights[player] = highlight
-                end
-            end
-            
-            -- Add ESP to existing players
-            for _, player in pairs(game:GetService("Players"):GetPlayers()) do
-                if player.Character then
-                    createESP(player)
-                end
-                player.CharacterAdded:Connect(function(character)
-                    if features.ESP.Enabled then
-                        createESP(player)
-                    end
-                end)
-            end
-            
-            -- Listen for new players
-            features.ESP.PlayerAdded = game:GetService("Players").PlayerAdded:Connect(function(player)
-                player.CharacterAdded:Connect(function(character)
-                    if features.ESP.Enabled then
-                        createESP(player)
-                    end
-                end)
-            end)
-        else
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
-            
-            -- Clean up ESP
-            for player, highlight in pairs(features.ESP.Highlights) do
-                if highlight and highlight.Parent then
-                    highlight:Destroy()
-                end
-            end
-            features.ESP.Highlights = {}
-            
-            if features.ESP.PlayerAdded then
-                features.ESP.PlayerAdded:Disconnect()
-                features.ESP.PlayerAdded = nil
-            end
-        end
-    end
-)
-
--- 6. Full Bright
-features.FullBright = createFeature(
-    "Full Bright", 
-    "Removes all darkness from the game", 
-    "Visual",
-    function(toggle, circle)
-        features.FullBright.Enabled = not features.FullBright.Enabled
-        
-        if features.FullBright.Enabled then
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
-            
-            -- Full bright implementation
-            features.FullBright.OriginalBrightness = Lighting.Brightness
-            features.FullBright.OriginalAmbient = Lighting.Ambient
-            features.FullBright.OriginalOutdoorAmbient = Lighting.OutdoorAmbient
-            
-            Lighting.Brightness = 2
-            Lighting.Ambient = Color3.new(1, 1, 1)
-            Lighting.OutdoorAmbient = Color3.new(1, 1, 1)
-            
-            features.FullBright.Changed = Lighting.Changed:Connect(function()
-                if features.FullBright.Enabled then
-                    Lighting.Brightness = 2
-                    Lighting.Ambient = Color3.new(1, 1, 1)
-                    Lighting.OutdoorAmbient = Color3.new(1, 1, 1)
+                    flyBodyVelocity.Velocity = Vector3.new(0, flySpeed, 0)
+                    flyBodyGyro.CFrame = workspace.CurrentCamera.CoordinateFrame
                 end
             end)
-        else
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
-            
-            -- Reset lighting
-            if features.FullBright.OriginalBrightness then
-                Lighting.Brightness = features.FullBright.OriginalBrightness
-            end
-            if features.FullBright.OriginalAmbient then
-                Lighting.Ambient = features.FullBright.OriginalAmbient
-            end
-            if features.FullBright.OriginalOutdoorAmbient then
-                Lighting.OutdoorAmbient = features.FullBright.OriginalOutdoorAmbient
-            end
-            
-            if features.FullBright.Changed then
-                features.FullBright.Changed:Disconnect()
-                features.FullBright.Changed = nil
-            end
+        end
+    else
+        game:GetService("TweenService"):Create(ToggleCircle2, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
+        game:GetService("TweenService"):Create(FlyToggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+        
+        -- Disable fly
+        if flyBodyVelocity then
+            flyBodyVelocity:Destroy()
+            flyBodyVelocity = nil
+        end
+        
+        if flyBodyGyro then
+            flyBodyGyro:Destroy()
+            flyBodyGyro = nil
         end
     end
-)
+end)
 
--- 7. Anti-AFK
-features.AntiAFK = createFeature(
-    "Anti-AFK", 
-    "Prevents you from being kicked for inactivity", 
-    "Utility",
-    function(toggle, circle)
-        features.AntiAFK.Enabled = not features.AntiAFK.Enabled
+-- Long Jump toggle
+LongJumpToggle.MouseButton1Click:Connect(function()
+    longJumpEnabled = not longJumpEnabled
+    
+    if longJumpEnabled then
+        game:GetService("TweenService"):Create(ToggleCircle3, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
+        game:GetService("TweenService"):Create(LongJumpToggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
         
-        if features.AntiAFK.Enabled then
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
-            
-            -- Anti-AFK implementation
-            features.AntiAFK.Connection = game:GetService("Players").LocalPlayer.Idled:Connect(function()
-                game:GetService("VirtualUser"):ClickButton2(Vector2.new())
-            end)
-        else
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
-            
-            if features.AntiAFK.Connection then
-                features.AntiAFK.Connection:Disconnect()
-                features.AntiAFK.Connection = nil
-            end
-        end
-    end
-)
-
--- 8. Infinite Jump
-features.InfiniteJump = createFeature(
-    "Infinite Jump", 
-    "Jump mid-air unlimited times", 
-    "Movement",
-    function(toggle, circle)
-        features.InfiniteJump.Enabled = not features.InfiniteJump.Enabled
+        -- Enable long jump
+        local jumpBoost = 1.5
+        local isJumping = false
         
-        if features.InfiniteJump.Enabled then
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
+        UserInputService.InputBegan:Connect(function(input, gameProcessed)
+            if not longJumpEnabled or gameProcessed then return end
             
-            -- Infinite jump implementation
-            features.InfiniteJump.Connection = UserInputService.JumpRequest:Connect(function()
-                if features.InfiniteJump.Enabled and Player.Character and Player.Character:FindFirstChild("Humanoid") then
-                    Player.Character:FindFirstChild("Humanoid"):ChangeState("Jumping")
-                end
-            end)
-        else
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
-            
-            if features.InfiniteJump.Connection then
-                features.InfiniteJump.Connection:Disconnect()
-                features.InfiniteJump.Connection = nil
-            end
-        end
-    end
-)
-
--- 9. Long Jump
-features.LongJump = createFeature(
-    "Long Jump", 
-    "Hold Jump mid-air for extra distance", 
-    "Movement",
-    function(toggle, circle)
-        features.LongJump.Enabled = not features.LongJump.Enabled
-        
-        if features.LongJump.Enabled then
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
-            
-            -- Long jump implementation
-            features.LongJump.Connection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-                if not features.LongJump.Enabled or gameProcessed then return end
-                
-                if input.KeyCode == Enum.KeyCode.Space and Player.Character and Player.Character:FindFirstChild("Humanoid") then
-                    local humanoid = Player.Character.Humanoid
-                    if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
-                        local root = Player.Character:FindFirstChild("HumanoidRootPart")
-                        if root then
-                            -- Apply forward force based on camera direction
-                            local camera = workspace.CurrentCamera
-                            local lookVector = camera.CFrame.LookVector
-                            lookVector = Vector3.new(lookVector.X, 0, lookVector.Z).Unit
-                            
-                            local bodyVelocity = Instance.new("BodyVelocity")
-                            bodyVelocity.Velocity = lookVector * (humanoid.WalkSpeed * 1.5)
-                            bodyVelocity.MaxForce = Vector3.new(10000, 0, 10000)
-                            bodyVelocity.Parent = root
-                            
-                            -- Clean up after short delay
-                            delay(0.5, function()
-                                if bodyVelocity and bodyVelocity.Parent then
-                                    bodyVelocity:Destroy()
-                                end
-                            end)
-                        end
-                    end
-                end
-            end)
-        else
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
-            
-            if features.LongJump.Connection then
-                features.LongJump.Connection:Disconnect()
-                features.LongJump.Connection = nil
-            end
-        end
-    end
-)
-
--- 10. Click Teleport
-features.ClickTeleport = createFeature(
-    "Click Teleport", 
-    "Click anywhere to teleport (mobile: tap)", 
-    "Movement",
-    function(toggle, circle)
-        features.ClickTeleport.Enabled = not features.ClickTeleport.Enabled
-        
-        if features.ClickTeleport.Enabled then
-            TweenService:Create(circle, TweenInfo.new(0.2), {Position = UDim2.new(0, 27, 0.5, -10)}):Play()
-            TweenService:Create(toggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(100, 180, 100)}):Play()
-            
-            -- Click teleport implementation
-            features.ClickTeleport.Connection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-                if not features.ClickTeleport.Enabled or gameProcessed then return end
-                
-                if (input.UserInputType == Enum.UserInputType.MouseButton1 and not isMobile()) or 
-                   (input.UserInputType == Enum.UserInputType.Touch and isMobile()) then
-                    if Player.Character and Player.Character:FindFirstChild("HumanoidRootPart") then
-                        local target
-                        if isMobile() then
-                            -- Mobile tap detection
-                            target = workspace:FindPartOnRay(Ray.new(
-                                workspace.CurrentCamera.CFrame.Position, 
-                                workspace.CurrentCamera.CFrame.LookVector * 1000
-                            ), Player.Character)
-                        else
-                            -- Mouse click detection
-                            local mouse = Player:GetMouse()
-                            target = mouse.Target
-                        end
+            if input.KeyCode == Enum.KeyCode.Space and Player.Character and Player.Character:FindFirstChild("Humanoid") then
+                local humanoid = Player.Character.Humanoid
+                if humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+                    isJumping = true
+                    local root = Player.Character:FindFirstChild("HumanoidRootPart")
+                    if root then
+                        -- Apply forward force based on camera direction
+                        local camera = workspace.CurrentCamera
+                        local lookVector = camera.CFrame.LookVector
+                        lookVector = Vector3.new(lookVector.X, 0, lookVector.Z).Unit
                         
-                        if target then
-                            local root = Player.Character.HumanoidRootPart
-                            local offset = (root.Position - root.CFrame.Position)
-                            local newPosition = target.Position + Vector3.new(0, 3, 0) + offset
-                            
-                            -- Create particle effect
-                            local part = Instance.new("Part")
-                            part.Anchored = true
-                            part.CanCollide = false
-                            part.Size = Vector3.new(1, 1, 1)
-                            part.Transparency = 1
-                            part.CFrame = root.CFrame
-                            part.Parent = workspace
-                            
-                            local particles = Instance.new("ParticleEmitter")
-                            particles.LightEmission = 1
-                            particles.Texture = "rbxassetid://242487987"
-                            particles.Color = ColorSequence.new(Color3.fromRGB(100, 200, 255))
-                            particles.Size = NumberSequence.new(0.
+                        local bodyVelocity = Instance.new("BodyVelocity")
+                        bodyVelocity.Velocity = lookVector * (humanoid.WalkSpeed * jumpBoost)
+                        bodyVelocity.MaxForce = Vector3.new(10000, 0, 10000)
+                        bodyVelocity.Parent = root
+                        
+                        -- Clean up after short delay
+                        delay(0.5, function()
+                            if bodyVelocity and bodyVelocity.Parent then
+                                bodyVelocity:Destroy()
+                            end
+                            isJumping = false
+                        end)
+                    end
+                end
+            end
+        end)
+    else
+        game:GetService("TweenService"):Create(ToggleCircle3, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0.5, -10)}):Play()
+        game:GetService("TweenService"):Create(LongJumpToggle, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)}):Play()
+    end
+end)
+
+-- Character added event to reapply settings if needed
+Player.CharacterAdded:Connect(function(character)
+    if speedEnabled then
+        character:WaitForChild("Humanoid").WalkSpeed = 50
+    end
+end)
+
+-- Parent the main frame last to avoid visual glitches
+MainFrame.Parent = ScreenGui
